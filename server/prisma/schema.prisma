@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String       @id @default(uuid())
+  email           String       @unique
+  password        String
+  xp              Int          @default(0)
+  level           Int          @default(1)
+  streak          Int          @default(0)
+  lastActive      DateTime     @default(now())
+  completedQuests String[]     @default([])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  submissions     Submission[]
+}
+
+model Problem {
+  id           String       @id @default(uuid())
+  title        String
+  description  String
+  instructions String[]
+  initialCode  String
+  solution     String
+  difficulty   Difficulty   @default(BEGINNER)
+  xp           Int          @default(150)
+  coins        Int          @default(25)
+  module       Int          @default(1)
+  submissions  Submission[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model Submission {
+  id         String   @id @default(uuid())
+  status     Status
+  code       String
+  output     String?
+  timeTaken  Int?     // In seconds
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  problemId  String
+  createdAt  DateTime @default(now())
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Status {
+  SUCCESS
+  FAIL
+  ERROR
+}
