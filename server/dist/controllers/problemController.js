@@ -1,44 +1,47 @@
-import { Request, Response } from "express";
-import prisma from "../lib/prisma";
-
-export const getProblems = async (req: Request, res: Response) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.submitSolution = exports.getProblemById = exports.getProblems = void 0;
+const prisma_1 = __importDefault(require("../lib/prisma"));
+const getProblems = async (req, res) => {
     try {
-        const problems = await prisma.problem.findMany({
+        const problems = await prisma_1.default.problem.findMany({
             orderBy: { module: "asc" },
         });
         res.json(problems);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
-export const getProblemById = async (req: Request, res: Response) => {
+exports.getProblems = getProblems;
+const getProblemById = async (req, res) => {
     const { id } = req.params;
-
     try {
-        const problem = await prisma.problem.findUnique({
-            where: { id: id as string },
+        const problem = await prisma_1.default.problem.findUnique({
+            where: { id: id },
         });
         if (!problem) {
             return res.status(404).json({ error: "Problem not found" });
         }
         res.json(problem);
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
-
-export const submitSolution = async (req: any, res: Response) => {
+exports.getProblemById = getProblemById;
+const submitSolution = async (req, res) => {
     const { id } = req.params;
     const { code, status, output, timeTaken } = req.body;
-
     try {
-        const problem = await prisma.problem.findUnique({ where: { id: id as string } });
+        const problem = await prisma_1.default.problem.findUnique({ where: { id: id } });
         if (!problem) {
             return res.status(404).json({ error: "Problem not found" });
         }
-
-        const submission = await prisma.submission.create({
+        const submission = await prisma_1.default.submission.create({
             data: {
                 code,
                 status,
@@ -48,23 +51,23 @@ export const submitSolution = async (req: any, res: Response) => {
                 problemId: id,
             },
         });
-
         if (status === "SUCCESS") {
-            await prisma.user.update({
+            await prisma_1.default.user.update({
                 where: { id: req.user.id },
                 data: {
                     xp: { increment: problem.xp },
                     coins: { increment: problem.coins },
                     completedQuests: {
-                        set: Array.from(new Set([...(await prisma.user.findUnique({ where: { id: req.user.id } }))?.completedQuests || [], id as string]))
+                        set: Array.from(new Set([...(await prisma_1.default.user.findUnique({ where: { id: req.user.id } }))?.completedQuests || [], id]))
                     },
                     lastActive: new Date(),
                 },
             });
         }
-
         res.json({ submission });
-    } catch (error) {
+    }
+    catch (error) {
         res.status(500).json({ error: "Internal server error" });
     }
 };
+exports.submitSolution = submitSolution;
