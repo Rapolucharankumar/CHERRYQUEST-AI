@@ -1,8 +1,15 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+let openai: OpenAI | null = null;
+
+function getOpenAIClient() {
+    if (!openai) {
+        // Fallback for Next.js build step where env vars might be missing
+        const apiKey = process.env.OPENAI_API_KEY || "dummy_key_to_prevent_build_error";
+        openai = new OpenAI({ apiKey });
+    }
+    return openai;
+}
 
 export async function getAIHint(prompt: string, userCode: string, instructions: string[]) {
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === "your_openai_api_key") {
@@ -11,7 +18,8 @@ export async function getAIHint(prompt: string, userCode: string, instructions: 
     }
 
     try {
-        const response = await openai.chat.completions.create({
+        const client = getOpenAIClient();
+        const response = await client.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {
@@ -38,7 +46,8 @@ export async function explainError(errorOutput: string, userCode: string) {
     }
 
     try {
-        const response = await openai.chat.completions.create({
+        const client = getOpenAIClient();
+        const response = await client.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {
