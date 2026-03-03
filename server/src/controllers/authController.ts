@@ -52,6 +52,7 @@ export const login = async (req: Request, res: Response) => {
 
         res.json({ token, user: { id: user.id, email: user.email } });
     } catch (error) {
+        console.error("Login Error:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
@@ -71,6 +72,7 @@ export const getMe = async (req: any, res: Response) => {
         });
         res.json(user);
     } catch (error) {
+        console.error("GetMe Error:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
