@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     
     # Clerk Auth (We will validate tokens later)
     CLERK_SECRET_KEY: str = ""
+    
+    # AI Mentor
+    OPENROUTER_API_KEY: str = ""
 
     class Config:
         env_file = ".env"
