@@ -1,6 +1,7 @@
 import { Cherry, Code2, Gamepad2, Swords, Trophy, Zap } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   return (
@@ -20,11 +21,25 @@ export default function Home() {
             </div>
             <span className="font-bold text-xl tracking-tight">CherryQuest AI</span>
           </div>
-          <div className="flex gap-4">
-            <Button variant="ghost" className="text-zinc-400 hover:text-white">Login</Button>
-            <Button className="bg-rose-600 hover:bg-rose-500 text-white border-0 shadow-[0_0_15px_rgba(225,29,72,0.5)]">
-              Play Free
-            </Button>
+          <div className="flex gap-4 items-center">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost" className="text-zinc-400 hover:text-white">Login</Button>
+              </SignInButton>
+              <SignInButton mode="modal">
+                <Button className="bg-rose-600 hover:bg-rose-500 text-white border-0 shadow-[0_0_15px_rgba(225,29,72,0.5)]">
+                  Play Free
+                </Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <Link href="/dashboard">
+                <Button className="bg-rose-600 hover:bg-rose-500 text-white border-0 shadow-[0_0_15px_rgba(225,29,72,0.5)] mr-4">
+                  Dashboard
+                </Button>
+              </Link>
+              <UserButton appearance={{ elements: { avatarBox: "w-10 h-10 ring-2 ring-rose-500/50" } }} />
+            </SignedIn>
           </div>
         </nav>
 
