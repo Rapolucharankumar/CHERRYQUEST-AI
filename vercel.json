@@ -10,12 +10,18 @@
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "/backend/main.py"
+      "source": "/api/backend(/.*)?",
+      "destination": {
+        "type": "service",
+        "service": "backend"
+      }
     },
     {
       "source": "/(.*)",
-      "destination": "/frontend/$1"
+      "destination": {
+        "type": "service",
+        "service": "frontend"
+      }
     }
   ]
 }
