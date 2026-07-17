@@ -112,6 +112,13 @@ export default function DashboardLayout({
                 <Coins className="w-4 h-4 text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.8)]" />
                 <span className="font-bold text-sm text-amber-50">1,240</span>
               </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center gap-1.5 bg-zinc-900/80 px-3 py-1.5 rounded-full border border-rose-500/20 shadow-[0_0_10px_rgba(244,63,94,0.15)]"
+              >
+                <Cherry className="w-4 h-4 text-rose-400 drop-shadow-[0_0_5px_rgba(244,63,94,0.8)]" />
+                <span className="font-bold text-sm text-rose-50">50</span>
+              </motion.div>
             </div>
           </div>
 
