@@ -4,13 +4,14 @@ from app.core.config import settings
 # Initialize OpenRouter Client
 client = openai.AsyncOpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=settings.OPENROUTER_API_KEY,
+    api_key=settings.OPENROUTER_API_KEY or "dummy_key_to_prevent_startup_crash",
 )
+
 
 async def analyze_code(code: str, mission_context: str) -> str:
     if not settings.OPENROUTER_API_KEY:
         return "The AI Mentor is currently meditating. (Missing OPENROUTER_API_KEY in .env)"
-        
+
     prompt = f"""You are the CherryQuest AI Mentor, a wise and encouraging programming teacher.
 The user is working on the following mission:
 {mission_context}

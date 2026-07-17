@@ -4,12 +4,18 @@ def calculate_level(total_xp: int) -> int:
     Level formula: level = (total_xp / 1000) ^ 0.5 + 1
     For MVP, we'll use a simpler threshold system.
     """
-    if total_xp < 500: return 1
-    if total_xp < 1200: return 2
-    if total_xp < 2500: return 3
-    if total_xp < 5000: return 4
-    if total_xp < 10000: return 5
+    if total_xp < 500:
+        return 1
+    if total_xp < 1200:
+        return 2
+    if total_xp < 2500:
+        return 3
+    if total_xp < 5000:
+        return 4
+    if total_xp < 10000:
+        return 5
     return 6
+
 
 def get_rank_title(level: int) -> str:
     ranks = {
@@ -21,6 +27,7 @@ def get_rank_title(level: int) -> str:
         6: "Legendary Developer"
     }
     return ranks.get(level, "Legendary Developer")
+
 
 def get_xp_for_next_level(current_level: int) -> int:
     thresholds = {

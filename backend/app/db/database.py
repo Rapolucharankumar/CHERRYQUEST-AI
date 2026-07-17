@@ -4,8 +4,8 @@ from app.core.config import settings
 
 # Create the async engine
 engine = create_async_engine(
-    settings.DATABASE_URL, 
-    echo=True, 
+    settings.DATABASE_URL,
+    echo=True,
     future=True,
     # Needed for sqlite to support concurrent access appropriately
     connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {}
@@ -20,6 +20,7 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 Base = declarative_base()
+
 
 async def get_db():
     async with AsyncSessionLocal() as session:
